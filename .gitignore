@@ -1,0 +1,19 @@
+# Entorno virtual
+venv/
+
+# Base de datos local
+instance/
+
+# Variables de entorno con credenciales
+.env
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos de VS Code
+.vscode/
+
+# Archivos del sistema
+.DS_Store
