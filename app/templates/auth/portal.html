@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Inicio{% endblock %}
+{% block content %}
+
+<div style="max-width:480px; margin: 2rem auto;">
+  <div class="card">
+    <div class="text-center" style="margin-bottom:1.25rem;">
+      <div style="font-size:2.5rem; margin-bottom:0.25rem;">📚</div>
+      <h1 style="font-size:1.6rem; color:#003366; font-weight:700;">BiblioAuth</h1>
+      <p class="text-muted" style="font-size:0.82rem; line-height:1.5; margin-top:0.5rem; max-width:360px; margin-left:auto; margin-right:auto;">
+        Sistema de gestión bibliotecaria que permite el <strong>préstamo</strong> y
+        <strong>devolución</strong> de libros de forma segura, con autenticación
+        multifactor para proteger los datos institucionales.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.elegir_portal') }}">
+
+      <div class="role-selector">
+        <input type="radio" name="rol" value="bibliotecario" id="rol-admin" checked
+               onchange="onRolChange()">
+        <label for="rol-admin">🔐 Administrador</label>
+        <input type="radio" name="rol" value="estudiante" id="rol-est"
+               onchange="onRolChange()">
+        <label for="rol-est">🎓 Estudiante</label>
+      </div>
+
+      <div class="form-group">
+        <label id="user-label">Usuario</label>
+        <input type="text" name="identificador" class="form-control"
+               id="user-input" placeholder="Ingresa tu usuario" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="password-wrapper">
+          <input type="password" name="password" class="form-control"
+                 id="password-input" placeholder="••••••••" required>
+          <button type="button" class="password-toggle" onclick="togglePassword()"
+                  id="toggle-btn" aria-label="Mostrar contraseña">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">
+        Ingresar →
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function onRolChange() {
+  var isEst = document.getElementById('rol-est').checked;
+  document.getElementById('user-label').textContent = isEst ? 'Código estudiantil' : 'Usuario';
+  document.getElementById('user-input').placeholder = isEst ? 'Ej: 2021-1045' : 'Ingresa tu usuario';
+}
+function togglePassword() {
+  var input = document.getElementById('password-input');
+  var btn = document.getElementById('toggle-btn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+</script>
+
+{% endblock %}

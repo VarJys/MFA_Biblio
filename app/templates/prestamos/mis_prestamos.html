@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Mis Préstamos{% endblock %}
+{% block content %}
+
+<div class="flex justify-between items-center mb-2">
+  <h2 style="font-size:1.2rem; font-weight:700;">
+    Hola, {{ current_user.nombre.split()[0] }} 👋
+  </h2>
+  <a href="{{ url_for('prestamos.historial') }}" class="btn btn-outline btn-sm">
+    Ver historial
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-title">Mis préstamos activos</div>
+
+  {% if prestamos %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Libro</th>
+        <th>Fecha préstamo</th>
+        <th>Devolver antes de</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td>
+          <strong>{{ p.libro.titulo }}</strong>
+          <div class="text-muted">{{ p.libro.autor }}</div>
+        </td>
+        <td>{{ p.fecha_prestamo.strftime('%d/%m/%Y') }}</td>
+        <td>
+          {% if p.fecha_devolucion_esp %}
+            {{ p.fecha_devolucion_esp.strftime('%d/%m/%Y') }}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          <span class="badge badge-{{ 'activo' if p.estado == 'ACTIVO' else 'pendiente' }}">
+            {{ p.estado.replace('_', ' ') }}
+          </span>
+        </td>
+        <td>
+          {% if p.estado == 'PENDIENTE_CONFIRMACION' %}
+          <form method="POST"
+                action="{{ url_for('prestamos.confirmar_devolucion', prestamo_id=p.id) }}">
+            <button type="submit" class="btn btn-primary btn-sm"
+                    onclick="return confirm('¿Confirmas la devolución de este libro?')">
+              ✓ Confirmar devolución
+            </button>
+          </form>
+          {% else %}
+            <span class="text-muted" style="font-size:0.82rem;">En préstamo</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📚</div>
+      <div class="empty-title">No tienes préstamos activos</div>
+      <div class="empty-desc">Visita la biblioteca para solicitar un nuevo préstamo.</div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

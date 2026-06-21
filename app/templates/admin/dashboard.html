@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Dashboard{% endblock %}
+{% block content %}
+
+<div class="flex justify-between items-center mb-2">
+  <h2 style="font-size:1.3rem; font-weight:700;">Panel de Biblioteca</h2>
+  <a href="{{ url_for('admin.buscar_estudiante') }}" class="btn btn-primary btn-sm">
+    + Nuevo préstamo
+  </a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-card-1">
+    <div class="stat-icon">📖</div>
+    <div class="stat-number">{{ prestamos_activos }}</div>
+    <div class="stat-label">Préstamos activos</div>
+  </div>
+  <div class="stat-card stat-card-2">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-number">{{ prestamos_pendientes }}</div>
+    <div class="stat-label">Pendientes confirmación</div>
+  </div>
+  <div class="stat-card stat-card-3">
+    <div class="stat-icon">📗</div>
+    <div class="stat-number">{{ libros_disponibles }}</div>
+    <div class="stat-label">Libros disponibles</div>
+  </div>
+  <div class="stat-card stat-card-4">
+    <div class="stat-icon">👤</div>
+    <div class="stat-number">{{ total_estudiantes }}</div>
+    <div class="stat-label">Estudiantes activos</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Acciones rápidas</div>
+  <div class="action-grid">
+    <a href="{{ url_for('admin.buscar_estudiante') }}" class="action-card">
+      <div class="action-icon">🔍</div>
+      <div class="action-label">Buscar estudiante</div>
+      <div class="action-desc">Localiza un estudiante por su código</div>
+    </a>
+    <a href="{{ url_for('admin.listar_prestamos') }}" class="action-card">
+      <div class="action-icon">📋</div>
+      <div class="action-label">Ver préstamos</div>
+      <div class="action-desc">Consulta y gestiona préstamos activos</div>
+    </a>
+  </div>
+</div>
+
+{% endblock %}

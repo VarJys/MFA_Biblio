@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Registrar Préstamo{% endblock %}
+{% block content %}
+
+<div style="max-width:640px; margin:0 auto;">
+
+  <div class="steps">
+    <div class="step completed">
+      <div class="step-number">✓</div>
+      <div class="step-label">Estudiante</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step active">
+      <div class="step-number">2</div>
+      <div class="step-label">Seleccionar libro</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-label">Confirmar</div>
+    </div>
+  </div>
+
+  <div class="card mb-2">
+    <div class="flex justify-between items-center">
+      <div>
+        <div class="card-title" style="margin-bottom:0.25rem;">
+          📖 Nuevo Préstamo
+        </div>
+        <p class="text-muted">
+          Estudiante: <strong>{{ estudiante.nombre }}</strong>
+          ({{ estudiante.codigo_estudiantil }})
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Seleccionar libro</div>
+    {% if libros %}
+    <form method="POST">
+      <table class="table mb-2">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Categoría</th>
+            <th>Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for libro in libros %}
+          <tr>
+            <td><strong>{{ libro.titulo }}</strong></td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.categoria }}</td>
+            <td>
+              <input type="radio" name="libro_id"
+                     value="{{ libro.id }}" required>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="flex gap-2">
+        <button type="submit" class="btn btn-primary">
+          Confirmar préstamo
+        </button>
+        <a href="{{ url_for('admin.buscar_estudiante') }}"
+           class="btn btn-outline">
+          Cancelar
+        </a>
+      </div>
+    </form>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">No hay libros disponibles</div>
+        <div class="empty-desc">Todos los ejemplares están prestados en este momento.</div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

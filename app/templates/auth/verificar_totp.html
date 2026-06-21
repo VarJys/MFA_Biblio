@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Verificar TOTP{% endblock %}
+{% block content %}
+
+<div style="max-width:400px; margin:1.5rem auto;">
+
+  <div class="steps">
+    <div class="step completed">
+      <div class="step-number">✓</div>
+      <div class="step-label">Credenciales</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step active">
+      <div class="step-number">2</div>
+      <div class="step-label">Verificar TOTP</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📱 Verificación TOTP</div>
+    <p class="text-muted mb-2">
+      Factor 2 de 2 — Abre Google Authenticator e ingresa el código actual.
+    </p>
+
+    <form method="POST">
+      <div class="form-group">
+        <label>Código de 6 dígitos</label>
+        <input type="text" name="codigo_totp" class="form-control otp-input"
+               placeholder="000000" maxlength="6"
+               pattern="\d{6}" inputmode="numeric" required autofocus>
+        <p class="text-muted mt-1" style="font-size:0.8rem;">
+          El código cambia cada 30 segundos.
+        </p>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">
+        Verificar acceso
+      </button>
+    </form>
+
+    <div class="text-center mt-2">
+      <a href="{{ url_for('auth.elegir_portal') }}" class="text-muted">
+        ← Volver
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

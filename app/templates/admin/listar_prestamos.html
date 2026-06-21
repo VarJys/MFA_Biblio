@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Préstamos Activos{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="flex justify-between items-center mb-2">
+    <div class="card-title" style="margin-bottom:0;">Préstamos Activos</div>
+    <a href="{{ url_for('admin.buscar_estudiante') }}" class="btn btn-primary btn-sm">
+      + Nuevo
+    </a>
+  </div>
+
+  {% if prestamos %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Estudiante</th>
+        <th>Libro</th>
+        <th>Fecha préstamo</th>
+        <th>Vence</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td>
+          <strong>{{ p.estudiante.nombre }}</strong>
+          <div class="text-muted">{{ p.estudiante.codigo_estudiantil }}</div>
+        </td>
+        <td>{{ p.libro.titulo }}</td>
+        <td>{{ p.fecha_prestamo.strftime('%d/%m/%Y') }}</td>
+        <td>
+          {% if p.fecha_devolucion_esp %}
+            {{ p.fecha_devolucion_esp.strftime('%d/%m/%Y') }}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          <span class="badge badge-{{ 'activo' if p.estado == 'ACTIVO' else 'pendiente' }}">
+            {{ p.estado.replace('_', ' ') }}
+          </span>
+        </td>
+        <td>
+          {% if p.estado == 'ACTIVO' %}
+          <form method="POST"
+                action="{{ url_for('admin.registrar_devolucion', prestamo_id=p.id) }}"
+                style="display:inline;">
+            <button type="submit" class="btn btn-outline btn-sm"
+                    onclick="return confirm('¿Registrar devolución de este libro?')">
+              Devolver
+            </button>
+          </form>
+          {% else %}
+            <span class="text-muted" style="font-size:0.82rem;">Esperando estudiante</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <div class="empty-title">No hay préstamos activos</div>
+      <div class="empty-desc">Todos los libros han sido devueltos. ¡Buen trabajo!</div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

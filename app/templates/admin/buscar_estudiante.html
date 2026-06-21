@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Buscar Estudiante{% endblock %}
+{% block content %}
+
+<div style="max-width:640px; margin:0 auto;">
+  <div class="card mb-2">
+    <div class="card-title">🔍 Buscar Estudiante</div>
+    <form method="POST">
+      <div class="flex gap-2 items-center">
+        <input type="text" name="codigo_estudiantil" class="form-control"
+               placeholder="Ej: 2021-1045" required autofocus>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </form>
+  </div>
+
+  {% if estudiante %}
+  <div class="credential-card">
+    <div class="credential-avatar">
+      {{- estudiante.nombre[0] -}}
+    </div>
+    <div class="credential-info">
+      <div class="credential-name">{{ estudiante.nombre }}</div>
+      <div class="credential-detail">
+        {{ estudiante.codigo_estudiantil }} · {{ estudiante.carrera }}
+      </div>
+      <div class="credential-detail" style="margin-top:4px;">
+        📧 {{ estudiante.correo_institucional }}
+      </div>
+    </div>
+    <span class="badge badge-{{ 'activo' if estudiante.estado == 'ACTIVO' else 'inactivo' }}">
+      {{ estudiante.estado }}
+    </span>
+  </div>
+
+  <div style="margin-top:1rem;">
+    {% if estudiante.estado == 'ACTIVO' %}
+      <a href="{{ url_for('admin.registrar_prestamo', estudiante_id=estudiante.id) }}"
+         class="btn btn-primary">
+        📖 Registrar préstamo
+      </a>
+    {% else %}
+      <p class="alert alert-warning" style="margin-bottom:0;">
+        Estudiante inactivo — no se pueden registrar préstamos.
+      </p>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}BiblioAuth — Historial{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="flex justify-between items-center mb-2">
+    <div class="card-title" style="margin-bottom:0;">Historial de préstamos</div>
+    <a href="{{ url_for('prestamos.mis_prestamos') }}" class="btn btn-outline btn-sm">
+      ← Volver
+    </a>
+  </div>
+
+  {% if prestamos %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Libro</th>
+        <th>Fecha préstamo</th>
+        <th>Fecha devolución</th>
+        <th>Estado</th>
+        <th>Confirmado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td>
+          <strong>{{ p.libro.titulo }}</strong>
+          <div class="text-muted">{{ p.libro.autor }}</div>
+        </td>
+        <td>{{ p.fecha_prestamo.strftime('%d/%m/%Y') }}</td>
+        <td>
+          {% if p.fecha_devolucion_real %}
+            {{ p.fecha_devolucion_real.strftime('%d/%m/%Y') }}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          <span class="badge badge-{{ p.estado.lower().replace('_', '') if p.estado != 'PENDIENTE_CONFIRMACION' else 'pendiente' }}">
+            {{ p.estado.replace('_', ' ') }}
+          </span>
+        </td>
+        <td>
+          {% if p.confirmado_estudiante %}
+            <span style="color:#065f46;">✓ Sí</span>
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📜</div>
+      <div class="empty-title">Aún no tienes historial</div>
+      <div class="empty-desc">Cuando realices tu primer préstamo, aparecerá aquí.</div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
